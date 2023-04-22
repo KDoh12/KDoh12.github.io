@@ -1,177 +1,182 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset=utf-8 />
+  <head>
+    <meta charset="utf-8" />
     <title>Redlining in Norfolk</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,900i" rel="stylesheet" />
 
     <style>
-        /* UK Colors: 
+      /* UK Colors: 
             #c7c9c8 light gray 
             #63666a dark gray
             #15397f dark blue
             #009bda light blue
             #0033a0 official blue
         */
-        body {
-            margin: 0;
-            padding: 0;
-            background: #ececec;
-            font-family: 'Lato', sans-serif;
-            font-weight: 300;
-            color: #3d3d3d;
-            font-size: 1.1em;
+      body {
+        margin: 0;
+        padding: 0;
+        background: #ececec;
+        font-family: "Lato", sans-serif;
+        font-weight: 300;
+        color: #3d3d3d;
+        font-size: 1.1em;
+      }
 
-        }
+      section {
+        width: 80%;
+        margin: 10px auto;
+      }
 
-        section {
-            width: 80%;
-            margin: 10px auto;
-        }
+      h1 {
+        font-family: "Lato", sans-serif;
+        font-weight: 900i;
+        font-size: 2.8em;
+        font-style: italic;
+        /* The em unit. 3x the current size */
+        letter-spacing: 0.01em;
+        margin: 0 0 15px 0;
+        /* text-transform: uppercase; */
+      }
 
-        h1 {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900i;
-            font-size: 2.8em;
-            font-style: italic;
-            /* The em unit. 3x the current size */
-            letter-spacing: .01em;
-            margin: 0 0 15px 0;
-            /* text-transform: uppercase; */
-        }
+      h2 {
+        font-family: "Lato", sans-serif;
+        font-weight: 300;
+        color: #63666a;
+        font-size: 1.5em;
+        letter-spacing: 0.06em;
+        font-style: italic;
+        margin: 0 0 25px 0;
+      }
 
-        h2 {
-            font-family: 'Lato', sans-serif;
-            font-weight: 300;
-            color: #63666a;
-            font-size: 1.5em;
-            letter-spacing: .06em;
-            font-style: italic;
-            margin: 0 0 25px 0;
-        }
+      p {
+        font-size: 1.15em;
+        line-height: 1.8em;
+        margin: 0 0 25px 0;
+      }
 
-        p {
-            font-size: 1.15em;
-            line-height: 1.8em;
-            margin: 0 0 25px 0;
-        }
+      a {
+        color: #3366cc;
+        text-decoration: none;
+      }
 
-        a {
-            color: #3366CC;
-            text-decoration: none;
-        }
+      a:hover {
+        text-decoration: underline;
+      }
 
-        a:hover {
-            text-decoration: underline;
-        }
+      ul {
+        padding: 0px 20px 4px 20px;
+        /* font-size: 0.96em; */
+        line-height: 1.6em;
+        color: #63666a;
+      }
 
-        ul {
-            padding: 0px 20px 4px 20px;
-            /* font-size: 0.96em; */
-            line-height: 1.6em;
-            color: #63666a;
-        }
+      li {
+        margin: 10px 0;
+      }
 
-        li {
-            margin: 10px 0
-        }
+      #map {
+        width: 100%;
+        margin: 0px auto;
+      }
 
-        #map {
-            width: 100%;
-            margin: 0px auto;
+      .max-image-width {
+        width: 100%;
+      }
 
-        }
+      /* add custom style class here */
 
-        .max-image-width {
-            width: 100%;
-        }
+      .linkbox {
+        margin: 3px 0 20px 0;
+        display: block;
+        font-weight: 300;
+      }
 
-        /* add custom style class here */
+      hr {
+        border: 0px;
+        border-bottom: 1px solid #3d3d3d;
+        padding-top: 20px;
+      }
 
-        .linkbox {
-            margin: 3px 0 20px 0;
-            display: block;
-            font-weight: 300;
-        }
+      /* Use float property to make two-column layout */
 
-        hr {
-            border: 0px;
-            border-bottom: 1px solid #3d3d3d;
-            padding-top: 20px;
-        }
+      .first-column {
+        float: left;
+        width: 48%;
+        padding-right: 20px;
+      }
 
-        /* Use float property to make two-column layout */
+      .column {
+        float: left;
+        width: 48%;
+      }
 
-        .first-column {
-            float: left;
-            width: 48%;
-            padding-right: 20px;
-        }
+      /* Clear floats after the columns */
 
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      .svg-title {
+        float: left;
+        display: block;
+        width: 75px;
+        margin: -8px 10px -8px 0;
+      }
+
+      #map-meta {
+        font-style: italic;
+        font-size: medium;
+      }
+
+      /* When browser is 800px wide or less */
+
+      @media screen and (max-width: 800px) {
+        .first-column,
         .column {
-            float: left;
-            width: 48%;
+          width: 100%;
         }
-
-        /* Clear floats after the columns */
-
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        .svg-title {
-            float: left;
-            display: block;
-            width: 75px;
-            margin: -8px 10px -8px 0;
-        }
-
-        #map-meta {
-            font-style: italic;
-            font-size: medium;
-        }
-
-        /* When browser is 800px wide or less */
-
-        @media screen and (max-width: 800px) {
-
-            .first-column,
-            .column {
-                width: 100%;
-            }
-        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <iframe src="map.html" width="100%" height="550px"></iframe>
     <section>
-        <a href='map.html' class="linkbox">Full-screen version</a>
+      <a href="map.html" class="linkbox">Full-screen version</a>
 
-        <h1>1940 Redlining in Norfolk: Now vs Then</h1>
-        <h2>University of Kentucky New Maps Plus</h2>
-        <div class="row">
-            <div>
-                <p>
-                    Redlining is a discriminatory practice of refusing services to a specif area or neighborhood based on certain characteristics. Click on the link below the map or click <a href="map.html">here</a> for a full-screen version of my map.<br>The colored areas on the map above are the actual boundaries created by the Home Owner Loan Corporation (HOLC) during the 1930s and 40s. They are colored based on the "grade" they were assigned by the HOLC which is A, B, C, and D grades with "A" being deemed the "best" areas for investment, and "D" being areas that investors should avoid unless absolutely necessary. If you click on the areas you will see some economic, home-ownership, and demographic data from both the 1940s and from 2019. The idea is to get a sense of what those areas were like back in 1940 as well has how they are today and examine any similarities or differences.
-                </p>
-                <p>
-                    Visit my README page <a href="https://github.com/KDoh12/redlining-norfolk">here</a> for more info on the project.
-                </p>
-                <hr>
-                <h4>
-                    Map Properties
-                </h4>
-                <p id="map-meta">
-                    Map was created using <a href="https://www.mapbox.com/">Mapbox</a>. Layers were prepared in <a href="https://qgis.org/en/site/">QGIS</a>.<br>Map and Layers are projected using the WGS84 Web Mercator coordinate system.<br>Map created by Kevin Dohner | Creation Date: December 2022<br>See more of my projects on Github: <a href="https://github.com/KDoh12">KDoh12</a>
-                </p>
-            </div>
+      <h1>1940 Redlining in Norfolk: Now vs Then</h1>
+      <h2>University of Kentucky New Maps Plus</h2>
+      <div class="row">
+        <div>
+          <p>
+            Redlining is a discriminatory practice of refusing services to a specif area or neighborhood based on certain characteristics. Click on
+            the link below the map or click <a href="map.html">here</a> for a full-screen version of my map.<br />The colored areas on the map above
+            are the actual boundaries created by the Home Owner Loan Corporation (HOLC) during the 1930s and 40s. They are colored based on the
+            "grade" they were assigned by the HOLC which is A, B, C, and D grades with "A" being deemed the "best" areas for investment, and "D" being
+            areas that investors should avoid unless absolutely necessary. If you click on the areas you will see some economic, home-ownership, and
+            demographic data from both the 1940s and from 2019. The idea is to get a sense of what those areas were like back in 1940 as well has how
+            they are today and examine any similarities or differences.
+          </p>
+          <p>
+            Visit my README page <a href="https://github.com/KDoh12/KDoh12.github.io/blob/main/redlining-norfolk/README.md">here</a> for more info on
+            the project.
+          </p>
+          <hr />
+          <h4>Map Properties</h4>
+          <p id="map-meta">
+            Map was created using <a href="https://www.mapbox.com/">Mapbox</a>. Layers were prepared in
+            <a href="https://qgis.org/en/site/">QGIS</a>.<br />Map and Layers are projected using the WGS84 Web Mercator coordinate system.<br />Map
+            created by Kevin Dohner | Creation Date: December 2022<br />See more of my projects on Github:
+            <a href="https://github.com/KDoh12">KDoh12</a>
+          </p>
         </div>
+      </div>
     </section>
-</body>
+  </body>
 </html>

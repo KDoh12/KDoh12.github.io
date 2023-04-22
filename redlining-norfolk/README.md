@@ -11,7 +11,7 @@ Feel free to read below to understand where the data came from, how I created th
 - The polygons for the redlined areas in Norfolk, VA were obtained as a GeoJSON file from [Mapping Inequality](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58).
 - 2019 Income, Housing, and Demographic data are from the 2019 ACS 5-Year Estimates and were downloaded from the [U.S. Census](https://data.census.gov/).
 - Census Tracts used in process were downloaded from [U.S. Census](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html).
-  
+
 ## What is Redlining?
 
 According to the Oxford English Dictionary, redlining means to
@@ -28,7 +28,7 @@ I personally like the Wikipedia version as it broadens the potential impact of r
 
 I wanted to create this map so that people could explore the redlined areas of Norfolk, VA as well as try to show how redlining has impacted those same areas some 80 years later.
 
-## Process (Work in Progress)
+## Process
 
 - Download data
   - First step was to download the GeoJSON for the redlined polygons and the census data. The census data I used was the 2019 ACS 5-Year Estimates as that was the most recent dataset that includes economic data at the census tract level.
