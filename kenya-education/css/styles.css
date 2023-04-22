@@ -1,0 +1,104 @@
+body {
+  font-family: "Lato", sans-serif;
+  font-size: 1.1rem;
+  color: white;
+  line-height: 1.8rem;
+  font-weight: 300;
+}
+
+h1 {
+  font-family: "Arvo", serif;
+  color: orange;
+  font-weight: 700;
+}
+
+#map {
+  height: 75vh;
+  border-top: 2px solid orange;
+  background-color: rgb(220, 220, 220);
+}
+
+.leaflet-legend {
+  width: 240px;
+  height: 180px;
+  /* Legend is not shown on small screens */
+  display: none;
+}
+
+/* CSS rule to toggle on/off legend */
+.show-legend {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.boys {
+  color: #6e77b0;
+  font-weight: 700;
+}
+
+.girls {
+  color: #d96d02;
+  font-weight: 700;
+}
+
+.girls,
+.boys,
+.trend {
+  /* color: #fff; */
+  font-weight: 700;
+  padding: 0 4px 0 4px;
+}
+
+.legend-large,
+.legend-small {
+  border-radius: 50%;
+  border: 1px solid white;
+}
+
+hr.small,
+hr.large {
+  width: 83px;
+  position: absolute;
+  top: -8px;
+  left: 55px;
+  border: 1px dashed #a7a7a7;
+  margin-top: 8px;
+}
+
+.leaflet-container {
+  font-family: "Lato", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  font-weight: 300;
+}
+
+#info {
+  z-index: 1000;
+  display: none;
+  width: 260px;
+  position: absolute;
+  /* top: 10px;
+  right: 10px; */
+}
+
+.slider-legend {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.form-range::-moz-range-thumb {
+  background-color: orange;
+}
+
+/* When screen is 768px or wider */
+@media screen and (min-width: 768px) {
+  #map {
+    border-top: none;
+  }
+  .leaflet-legend {
+    display: block;
+  }
+  #legend button {
+    display: none;
+  }
+}

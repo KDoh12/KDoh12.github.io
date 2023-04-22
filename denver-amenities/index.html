@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Denver Amenities</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <!-- Is the is the latest version of Leaflet? -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Ubuntu:700" rel="stylesheet" />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: rgb(43, 43, 43);
+        font-family: "Open Sans", sans-serif;
+        font-size: 100%;
+        color: rgb(172, 172, 172);
+      }
+
+      header,
+      footer,
+      section {
+        padding: 6px;
+        margin: 0 auto;
+        width: 90%;
+      }
+
+      h1 {
+        color: rgb(86, 153, 10);
+        font-family: "Ubuntu", sans-serif;
+        font-size: 2em;
+        text-shadow: 0px 0px 3px;
+        position: absolute;
+        margin-top: 3px;
+        top: 10px;
+        left: 50px;
+        letter-spacing: 0.04em;
+        padding: 10px 15px;
+        /* Add styles to match Leaflet UI elements */
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        z-index: 800;
+      }
+
+      h2 {
+        color: rgb(86, 153, 10);
+        font-family: "Ubuntu", sans-serif;
+        letter-spacing: 0.05em;
+        margin-top: 0px;
+        text-transform: uppercase;
+        text-shadow: 0px 0px 3px;
+        margin-bottom: 10px;
+        /* border-bottom: 2px dotted rgb(86, 153, 10); */
+      }
+
+      #map {
+        width: 100%;
+        position: absolute;
+        height: 100%;
+      }
+
+      p {
+        margin-top: 10px;
+        color: rgb(0, 0, 0);
+      }
+
+      #about {
+        position: absolute;
+        z-index: 800;
+        left: 10px;
+        bottom: 10px;
+        background: rgba(255, 255, 255, 0.75) center;
+        border: 1px solid gray;
+        border-radius: 5px;
+        padding: 7px;
+        width: 400px;
+      }
+
+      .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
+        background-color: rgba(255, 255, 255, 0.75);
+      }
+
+      .leaflet-control-layers-list {
+        width: auto;
+        font-family: "Open Sans", sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Denver Amenities</h1>
+
+    <div id="map"></div>
+
+    <div id="about">
+      <h2>Food, Fire & Schools</h2>
+      <hr />
+      <p>
+        This map displays various amenities around Denver, Colorado. Click anywhere on the map to learn the name and address of the amenities that are
+        within 1km of the clicked spot.
+      </p>
+      <p>
+        Map Created by Kevin Dohner<br />
+        Created March 2023<br />
+        See more of my projects on GitHub: <a href="https://github.com/KDoh12" target="_blank">KDoh12</a>
+      </p>
+    </div>
+
+    <!-- Is the is the latest version of Leaflet? -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+    <!-- Connect to the data -->
+    <script src="data/after-school-programs.js"></script>
+    <script src="data/denver-fire-stations.js"></script>
+    <script src="data/denver-food-stores.js"></script>
+
+    <script>
+      // create a map
+      var map = L.map("map", {
+        center: [39.7256, -104.9252],
+        zoom: 11,
+      });
+
+      var tiles = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/dark_all/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: "abcd",
+        maxZoom: 19,
+      }).addTo(map);
+
+      // *******************************************************
+
+      // Create an object for common styles that all layers will use
+      var commonStyles = {
+        radius: 5,
+        stroke: false,
+        fillOpacity: 1,
+      };
+
+      // Create an object to hold variables to use when creating geojson layers
+      var layerInfo = {
+        programLayer: {
+          name: programs,
+          color: "#1D85F0",
+        },
+        stationLayer: {
+          name: stations,
+          color: "#F04236",
+        },
+        storeLayer: {
+          name: stores,
+          color: "#DDF04D",
+        },
+      };
+
+      // Create an empty object to store the variable names for each layer
+      var geoJsonLayers = {};
+
+      // Loop through and create the geojson layers
+      for (var layer in layerInfo) {
+        geoJsonLayers[layer] = L.geoJson(layerInfo[layer].name, {
+          pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, commonStyles);
+          },
+          style: function (feature) {
+            return {
+              color: layerInfo[layer].color,
+              fillColor: layerInfo[layer].color,
+            };
+          },
+        }).addTo(map);
+      }
+
+      // Create an object to build layer control
+      var sourceLabels = {
+        "<span style='color:#1D85F0;font-weight:bold'>After School Programs</span>": geoJsonLayers.programLayer,
+        "<span style='color:#F04236;font-weight:bold'>Fire Stations</span>": geoJsonLayers.stationLayer,
+        "<span style='color:#DDF04D;font-weight:bold;text-shadow: 0px 0px 3px #333'>Food Stores</span>": geoJsonLayers.storeLayer,
+      };
+
+      // Add a layer control
+      L.control
+        .layers(null, sourceLabels, {
+          collapsed: false,
+        })
+        .addTo(map);
+
+      // create a variable to house a leaflet circle
+      var radiusCircle = L.circle([0, 0], 1000, {
+        fillColor: "white",
+        fillOpacity: 0.1,
+        stroke: false,
+        interactive: false,
+      });
+
+      // Create a click function
+      map.on("click", function (e) {
+        // Add the leaflet circle
+        radiusCircle.setLatLng(e.latlng).addTo(map);
+
+        // Loop through all the layers
+        for (var gsLayer in layerInfo) {
+          geoJsonLayers[gsLayer].eachLayer(function (layer) {
+            // Define a distance from click point to each feature
+            var distance = e.latlng.distanceTo(layer.getLatLng());
+
+            // Create if/else to "turn off" features not within a certain distance
+            if (distance > 1000) {
+              layer.setStyle({
+                fillOpacity: 0.1,
+              });
+            } else {
+              layer.setStyle({
+                fillOpacity: 1,
+              });
+
+              // Create Tooltips
+              // ***************
+              var props = layer.feature.properties;
+              var content = "";
+
+              // Log the props to the console to see attribute data such as field names and values
+              // This can help with building the popup
+              // console.log(props);
+
+              // if/else to handle different layers tooltips
+              if (gsLayer == "programLayer") {
+                content = `<b>${props.ORGANIZATI}</b><br>
+                          ${props.FULL_ADDRE}`;
+              } else if (gsLayer == "stationLayer") {
+                content = `<b>Station ${props.STATION_NU}</b><br>
+                          ${props.FULL_ADDRE}<br>`;
+              } else if (gsLayer == "storeLayer") {
+                content = `<b>${props.STORE_NAME}</b><br>
+                          ${props.ADDRESS_LI}`;
+              }
+
+              // Bind tooltips
+              layer.bindTooltip(content);
+              // ***************
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

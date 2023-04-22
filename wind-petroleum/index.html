@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Power Plant Analysis</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="icon" href="https://newmapsplus.github.io/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Libre+Franklin" rel="stylesheet" />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: floralwhite;
+        font-family: "Libre Franklin", sans-serif;
+        color: #3d3d3d;
+      }
+
+      header,
+      section,
+      footer {
+        width: 80%;
+        margin: 10px auto;
+      }
+
+      h1 {
+        font-family: "Cardo", serif;
+        font-size: 2.8em;
+        font-style: italic;
+        letter-spacing: 0.02em;
+        margin: 5px 0;
+      }
+
+      h2 {
+        font-family: "Cardo", serif;
+        color: #63666a;
+        font-size: 2.2em;
+        letter-spacing: 0.06em;
+        font-style: italic;
+        margin: 5px 0;
+      }
+
+      h3 {
+        font-weight: 300i;
+        font-size: 1.5em;
+        margin-bottom: 5px;
+      }
+
+      p {
+        font-size: 1.3em;
+        line-height: 1.8em;
+        margin-bottom: 5px;
+      }
+
+      a {
+        color: #004a8b;
+        font-weight: 400;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      hr {
+        margin: 20px 0;
+        border: 0;
+        height: 1px;
+        background: #63666a;
+      }
+
+      .linkbox {
+        margin: 3px 0 20px 0;
+        display: block;
+        font-size: 0.9em;
+        font-weight: 300;
+        line-height: 1.3em;
+      }
+
+      #map {
+        width: 100%;
+        height: 600px;
+        margin: 10px auto;
+      }
+
+      .max-image-width {
+        width: 100%;
+      }
+
+      /* Use float property to make two-column layout */
+      .first-column {
+        float: left;
+        width: 49%;
+        padding-right: 2%;
+      }
+
+      .column {
+        float: left;
+        width: 49%;
+      }
+
+      /* Clear floats after the columns */
+      .row::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+
+      /* When browser is 900px wide or less */
+      @media screen and (max-width: 900px) {
+        .first-column,
+        .second-column {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>U.S. Power Plants</h1>
+    </header>
+    <section>
+      <div class="row">
+        <div id="map"></div>
+
+        <div class="first-column">
+          <h2>Wind vs Petroleum</h2>
+          <p>
+            Based on the spatial patterns derived from the map, petroleum power plants are primarily concentrated on the
+            east coast with many smaller producing plants located in the mid-west while wind power is primarily located
+            in the mid-west. While Petroleum appears to be used more than wind, and large petroleum plants on the east
+            coast, it appears that on average wind generates more energy when it is deployed rather than petroleum.
+            Further analysis of the data would need to be conducted to test this hypothesis.
+          </p>
+          <p>See more of my projects on GitHub: <a href="https://github.com/KDoh12" target="_blank">KDoh12</a></p>
+        </div>
+        <div class="column">
+          <img
+            class="max-image-width"
+            src="https://media.wired.com/photos/63227cb600704d14b5ffb891/master/w_2560%2Cc_limit/windturbines_Science_GettyImages-1203659530.jpg"
+            title="Electricity and bubbles in a Lexington sunset"
+          />
+          <div class="linkbox">
+            <a href="https://www.wired.com/story/wind-turbine-efficiency-algorithm/">Wind Turbines in a field</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <hr />
+
+      <a href="https://newmapsplus.github.io">
+        <img
+          src="https://newmapsplus.github.io/assets/graphics/logo-2018-nmp-75px-h-gray.png"
+          alt="University of Kentucky Geography"
+        />
+      </a>
+
+      <a href="https://uky-gis.github.io">
+        <img
+          src="https://newmapsplus.github.io/assets/graphics/logo-2018-geography-75px-h.png"
+          alt="University of Kentucky Geography"
+        />
+      </a>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="data/power-plants.js"></script>
+    <script>
+      // map options
+      var options = {
+        center: [38, -95],
+        zoom: 4,
+      };
+
+      // create a Leaflet map in our division container with id of 'map'
+      var map = L.map("map", options);
+
+      // Leaflet providers base map URL
+      var basemap_source = "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/dark_all/{z}/{x}/{y}.png";
+
+      // Leaflet providers attributes
+      var basemap_options = {
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: "abcd",
+        maxZoom: 19,
+      };
+
+      // request some basemap tiles and add to the map
+      var tiles = L.tileLayer(basemap_source, basemap_options).addTo(map);
+
+      // Sort the GeoJson data before you load it
+      plants.features.sort(function (a, b) {
+        return b.properties.capacity_mw - a.properties.capacity_mw;
+      });
+
+      // Create some common styles all layers will use for Marker symbols
+      var commonStyles = {
+        fillOpacity: 0.8,
+        weight: 1,
+        stoke: 0.7,
+      };
+
+      // Load plants data filtered to Wind plants
+      var windLayer = L.geoJson(plants, {
+        // Filter to Wind Plants
+        filter: function (feature) {
+          if (feature.properties.fuel_source.Wind) {
+            return feature;
+          }
+        },
+
+        // Create markers
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, commonStyles);
+        },
+
+        // Set style unique to this layer
+        style: function (feature) {
+          // This is the code I tried to get the fuel source with the largest quantity to be what gets passed to the getRadius function
+          // -------------------------------------------
+          // var fuel = feature.properties.fuel_source;
+
+          // I used this because it appeared the largest values were always first in the fuel_source object
+          // var firstFuel = Object.keys(fuel)[0];
+          // radParam = `feature.properties.fuel_source['${firstFuel}']`; // I used bracket notation incase the "firstFuel" key had a space in it
+          // console.log(radParam); // This outputs what looks to be a correct string but doesn't work as the input to the funtion
+          // -------------------------------------------
+
+          return {
+            color: "#6fc5af",
+            fillColor: "#6fc5af",
+            radius: getRadius(feature.properties.fuel_source.Wind), // radParam
+          };
+        },
+
+        // Add interactivity to the layer
+        onEachFeature: function (feature, layer) {
+          // Change color of symbol on mouseover
+          layer.on("mouseover", function () {
+            layer.setStyle({
+              fillColor: "yellow",
+            });
+          });
+
+          // Change color back to the default layer color on mouseout
+          layer.on("mouseout", function () {
+            layer.setStyle({
+              fillColor: "#6fc5af",
+            });
+          });
+
+          // Go through the fuel source object and get all properties to add to tooltip
+          var fuel = feature.properties.fuel_source;
+          tooltip = `<b>${feature.properties.plant_name}</b>`;
+
+          for (var [key, values] of Object.entries(fuel)) {
+            tooltip += `<br><b>${key}</b>: ${values} MW`;
+          }
+
+          // Bind a tooltip to the layer
+          layer.bindTooltip(tooltip);
+        },
+      }).addTo(map);
+
+      // Load the plants data filtered to show Petroleum plants
+      var petroLayer = L.geoJson(plants, {
+        // Filter to Petroleum Plants
+        filter: function (feature) {
+          if (feature.properties.fuel_source.Petroleum) {
+            return feature;
+          }
+        },
+
+        // Create markers
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, commonStyles);
+        },
+
+        // Set style unique to this layer
+        style: function (feature) {
+          return {
+            color: "#006165",
+            fillColor: "#006165",
+            radius: getRadius(feature.properties.fuel_source.Petroleum),
+          };
+        },
+
+        // Add interactivity to layer
+        onEachFeature: function (feature, layer) {
+          // Change color of symbol on mouseover
+          layer.on("mouseover", function () {
+            layer.setStyle({
+              fillColor: "yellow",
+            });
+          });
+
+          // Change color back to default color of symbol
+          layer.on("mouseout", function () {
+            layer.setStyle({
+              fillColor: "#006165",
+            });
+          });
+
+          // Go through the fuel source object and get all properties to add to tooltip
+          var fuel = feature.properties.fuel_source;
+          tooltip = `<b>${feature.properties.plant_name}</b>`;
+
+          for (var [key, values] of Object.entries(fuel)) {
+            tooltip += `<br><b>${key}</b>: ${values} MW`;
+          }
+
+          // Add a tooltip to the layer
+          layer.bindTooltip(tooltip);
+        },
+      }).addTo(map);
+
+      // Create function called getRadius
+      function getRadius(area) {
+        var radius = Math.sqrt(area / Math.PI);
+        return radius * 0.6;
+      }
+    </script>
+  </body>
+</html>

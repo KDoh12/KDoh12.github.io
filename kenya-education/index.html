@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Kenyan Education</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Lato" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="content" class="col-md-3 py-2 overflow-scroll bg-dark">
+          <h1>Going to School?</h1>
+          <p>
+            Over the last decade, Kenya has made huge pushes in its education. According to the
+            <a href="https://www.worldbank.org/en/country/kenya/publication/lessons-from-kenya-s-education-reforms" target="_blank">World Bank</a>,
+            Kenya allocated nearly 20% of its government budget on education. With such a large amount of spending on education, there have been major
+            improvements in enrollment rates as well as test scores in various subjects.
+          </p>
+          <p>
+            While improvements have been made, there are still various counties in the north and south that are more rural and maintain low enrollment
+            rates. The overall trend of the country seems to show that enrollment tends to decline the closer people get to the end of the education
+            system (grade 8). While I am sure the pandemic did not help in enrollment, the country seems determined to invest heavily in its
+            education.
+          </p>
+          <ul>
+            <li>Authored By Kevin Dohner</li>
+            <li>Created April 2023</li>
+            <li>See More <a href="https://github.com/KDoh12" target="_blank">Maps!</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9 p-0">
+          <div id="map"></div>
+          <!-- UI Slider -->
+          <div id="slider" class="shadow-sm p-3 bg-dark rounded-2">
+            <div class="slider-legend">
+              <p><span>Grade 1</span></p>
+            </div>
+            <input type="range" class="form-range" min="1" max="8" value="1" step="1" />
+          </div>
+          <!-- Legend -->
+          <div id="legend" class="shadow-sm p-3 bg-dark rounded-2">
+            <div class="leaflet-legend">
+              <h5>Number of <span class="girls">girl</span> and <span class="boys">boy</span> students enrolled by county</h5>
+              <div class="legend-circles position-relative">
+                <div class="legend-large position-absolute"></div>
+                <div class="legend-small position-absolute"></div>
+                <hr class="large" />
+                <div class="legend-large-label position-absolute"></div>
+                <hr class="small" />
+                <div class="legend-small-label position-absolute"></div>
+              </div>
+            </div>
+            <button class="btn btn-primary float-end">Legend</button>
+          </div>
+        </div>
+      </div>
+      <footer class="footer fixed-bottom bg-secondary bg-gradient" id="footer">
+        <div class="row">
+          <div class="col-12 text-center text-white pt-2">
+            <!-- <h2>© &#8734; 🦋</h2> -->
+            <a href="https://newmapsplus.github.io">
+              <img src="https://newmapsplus.github.io/assets/graphics/logo-2018-nmp-75px-h-gray.png" alt="University of Kentucky New Maps Plus" />
+            </a>
+            <a href="https://uky-gis.github.io">
+              <img
+                src="https://newmapsplus.github.io/assets/graphics/logo-2018-geography-75px-h.png"
+                alt="University of Kentucky Department of Geography"
+              />
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- Info Window -->
+    <div id="info" class="p-2 bg-dark rounded-2 shadow">
+      <h4><span></span> County</h4>
+      <p class="girls mb-0">
+        Girls <span></span>:
+        <span></span>
+      </p>
+      <p class="boys">
+        Boys <span></span>:
+        <span></span>
+      </p>
+      <p class="trend">Trend: grades 1 &ndash; 8</p>
+      <p>
+        <span id="girlspark"></span>
+      </p>
+      <p>
+        <span id="boyspark"></span>
+      </p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script>
+    <!-- Omnivore JS -->
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
+    <!-- D3 JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.1.1/d3.min.js"
+      integrity="sha512-COTaPOlz12cG4fSfcBsxZsjauBAyldqp+8FQUM/dZHm+ts/jR4AFoJhCqxy8K10Jrf3pojfsbq7fAPTb1XaVkg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+  </body>
+</html>
