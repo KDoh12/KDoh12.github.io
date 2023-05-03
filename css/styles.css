@@ -5489,6 +5489,7 @@ fieldset:disabled .btn {
 }
 
 .modal-title {
+  color: #0033a0;
   margin-bottom: 0;
   line-height: var(--bs-modal-title-line-height);
 }
